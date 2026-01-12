@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="solar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Mobile Notary Toolkit - Offline-friendly tools for field notaries. Smart fee calculator, document templates, expense tracker, and more. No logins. Data stays on your device." />
+  <meta name="keywords" content="mobile notary, notary tools, fee calculator, notary software, document templates, notary services" />
+  <meta name="author" content="Mobile Notary Toolkit" />
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="English" />
+  <meta name="revisit-after" content="7 days" />
+  
+  <!-- Open Graph Meta Tags for Social Sharing -->
+  <meta property="og:title" content="Mobile Notary Toolkit - Professional Notary Tools" />
+  <meta property="og:description" content="Offline-friendly tools for field notaries. Smart fee calculator, document templates, expense tracker, and more. No logins. Data stays on your device." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mobile-notary-toolkit.com" />
+  <meta property="og:site_name" content="Mobile Notary Toolkit" />
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mobile Notary Toolkit - Professional Notary Tools" />
+  <meta name="twitter:description" content="Offline-friendly tools for field notaries. Smart fee calculator, document templates, and more." />
+  
+  <!-- Additional SEO Meta Tags -->
+  <meta name="theme-color" content="#0ea5e9" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://mobile-notary-toolkit.com" />
+  
+  <title>Mobile Notary Toolkit - Offline Notary Tools for Professional Services</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <!-- JSON-LD Schema Markup for Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Mobile Notary Toolkit",
+    "description": "Offline-friendly tools for field notaries with smart fee calculator, document templates, and expense tracking",
+    "url": "https://mobile-notary-toolkit.com",
+    "applicationCategory": "BusinessApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Mobile Notary Toolkit"
+    },
+    "featureList": [
+      "Smart Fee Calculator",
+      "Document Templates",
+      "Expense Tracker",
+      "Offline Functionality",
+      "No Login Required"
+    ],
+    "inLanguage": "en-US"
+  }
+  </script>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+    html[data-theme="solar"] {
+      --bg: #f9fafb;
+      --bg-alt: #ffffff;
+      --fg: #111827;
+      --muted: #6b7280;
+      --accent: #0ea5e9;
+      --accent-soft: #e0f2fe;
+      --border: #e5e7eb;
+    }
+    html[data-theme="night"] {
+      --bg: #020617;
+      --bg-alt: #020617;
+      --fg: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-soft: #082f49;
+      --border: #1f2937;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .card {
+      background-color: var(--bg-alt);
+      border-color: var(--border);
+    }
+    .btn-primary {
+      background-color: var(--accent);
+      color: white;
+    }
+    .btn-primary-soft {
+      background-color: var(--accent-soft);
+      color: var(--accent);
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .input-base {
+      background-color: var(--bg-alt);
+      color: var(--fg);
+      border-color: var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 0.25rem;
+      font-size: 0.875rem;
+    }
+    th {
+      text-align: left;
+      font-weight: 600;
+    }
+    @media (min-width: 640px) {
+      body {
+        display: flex;
+        justify-content: center;
+      }
+      .app-shell {
+        max-width: 32rem;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="app-shell px-4 py-4 sm:py-8 w-full">
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-4">
+      <div>
+        <h1 class="text-xl font-semibold tracking-tight flex items-center gap-2">
+          <span id="logo-icon" class="inline-flex items-center justify-center rounded-full p-1.5 btn-primary-soft">
+            <i data-lucide="pen-square" class="w-4 h-4"></i>
+          </span>
+          <span>Mobile Notary Toolkit</span>
+        </h1>
+        <p class="text-xs muted mt-1">Offline-friendly tools for field notaries. No logins. Data stays on your device.</p>
+      </div>
+      <button id="themeToggle" class="flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs font-medium btn-primary-soft" type="button">
+        <i data-lucide="sun-medium" class="w-4 h-4" id="themeIcon"></i>
+        <span id="themeLabel">Solar</span>
+      </button>
+    </header>
+
+    <!-- Smart Fee Calculator -->
+    <section class="card border rounded-2xl p-4 mb-4 shadow-sm">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-base font-semibold flex items-center gap-2">
+          <i data-lucide="calculator" class="w-4 h-4"></i>
+          Smart Fee Calculator
+        </h2>
+        <span class="text-[10px] uppercase tracking-wide muted">Quick quote</span>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium mb-1" for="statePreset">State preset</label>
+          <select id="statePreset" class="input-base w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400">
+            <option value="CA" data-rate="15" selected>California — $15 / signature</option>
+            <option value="FL" data-rate="10">Florida — $10 / signature</option>
+            <option value="TX" data-rate="6">Texas — $6 / signature</option>
+            <option value="custom" data-rate="0">Custom rate…</option>
+          </select>
+        </div>
+
+        <div id="customRateWrapper" class="hidden">
+          <label class="block text-xs font-medium mb-1" for="customRate">Custom state rate (per signature)</label>
+          <div class="flex items-center gap-2">
+            <span class="text-sm muted">$</span>
+            <input id="customRate" type="number" min="0" step="0.01" class="input-base flex-1 rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" placeholder="Enter rate" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium mb-1" for="signatureCount">Number of signatures</label>
+            <input id="signatureCount" type="number" min="0" step="1" class="input-base w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" placeholder="e.g. 5" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium mb-1" for="mileageRate">Mileage rate ($ / mile)</label>
+            <input id="mileageRate" type="number" min="0" step="0.01" class="input-base w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" value="0.65" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium mb-1" for="travelMiles">Travel miles (round-trip)</label>
+          <input id="travelMiles" type="number" min="0" step="0.1" class="input-base w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" placeholder="e.g. 18.4" />
+        </div>
+
+        <div class="rounded-xl px-3 py-2.5 bg-sky-50/80 dark:bg-sky-900/20 flex items-center justify-between text-sm" style="background-color: var(--accent-soft); color: var(--accent);">
+          <div>
+            <p class="text-[11px] uppercase tracking-wide font-semibold">Estimated fee</p>
+            <p class="text-xs opacity-80" id="feeBreakdown">Waiting for inputs…</p>
+          </div>
+          <p class="text-lg font-semibold" id="totalFeeDisplay">$0.00</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Local Mileage Log -->
+    <section class="card border rounded-2xl p-4 mb-4 shadow-sm">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-base font-semibold flex items-center gap-2">
+          <i data-lucide="map" class="w-4 h-4"></i>
+          Mileage Log
+        </h2>
+        <span class="text-[10px] uppercase tracking-wide muted">Private · local only</span>
+      </div>
+
+      <form id="mileageForm" class="space-y-3 mb-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium mb-1" for="tripDate">Date</label>
+            <input id="tripDate" type="date" class="input-base w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium mb-1" for="tripMiles">Miles</label>
+            <input id="tripMiles" type="number" min="0" step="0.1" class="input-base w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" placeholder="e.g. 23.6" required />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1" for="tripDesc">Description</label>
+          <input id="tripDesc" type="text" maxlength="120" class="input-base w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" placeholder="Client name or neighborhood" />
+        </div>
+        <button type="submit" class="w-full flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium btn-primary">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          Log today's trip
+        </button>
+      </form>
+
+      <div class="flex items-center justify-between mb-2">
+        <p class="text-xs muted">Recent trips (stored in this browser only)</p>
+        <button id="exportCsv" type="button" class="flex items-center gap-1 text-[11px] font-medium px-2 py-1 rounded-full border btn-primary-soft">
+          <i data-lucide="download" class="w-3 h-3"></i>
+          Export CSV
+        </button>
+      </div>
+
+      <div class="overflow-x-auto -mx-1">
+        <table id="logTable">
+          <thead>
+            <tr class="text-[11px] muted">
+              <th class="pr-2">Date</th>
+              <th class="pr-2">Description</th>
+              <th class="pr-2 text-right">Miles</th>
+              <th class="pr-2 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="logTbody" class="text-xs">
+            <!-- Rows injected by JS -->
+          </tbody>
+        </table>
+        <p id="noLogs" class="text-xs muted mt-2">No trips logged yet.</p>
+      </div>
+    </section>
+
+    <!-- Invoice & Share -->
+    <section class="card border rounded-2xl p-4 mb-4 shadow-sm">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-base font-semibold flex items-center gap-2">
+          <i data-lucide="file-text" class="w-4 h-4"></i>
+          Invoice & Share
+        </h2>
+        <span class="text-[10px] uppercase tracking-wide muted flex items-center gap-1">
+          <i data-lucide="share-2" class="w-3 h-3"></i>
+          Mobile-ready
+        </span>
+      </div>
+
+      <div class="space-y-2 mb-3">
+        <label class="block text-xs font-medium" for="clientName">Client / signer name</label>
+        <input id="clientName" type="text" class="input-base w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" placeholder="Optional, for invoice" />
+        <p class="text-[11px] muted">Uses your current fee calculator values to build a PDF invoice and opens your phone's share sheet.</p>
+      </div>
+
+      <button id="generateInvoice" type="button" class="w-full flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium btn-primary mb-2">
+        <i data-lucide="sparkles" class="w-4 h-4"></i>
+        Generate PDF invoice (download + share)
+      </button>
+      <p id="shareHint" class="text-[11px] muted flex items-center gap-1">
+        <i data-lucide="info" class="w-3 h-3"></i>
+        On some desktops, the share sheet may not appear; the PDF will still download.
+      </p>
+    </section>
+
+    <footer class="mt-4 mb-2 text-[10px] text-center muted">
+      Built for independent mobile notaries. All calculations are estimates; confirm your state rules.
+    </footer>
+  </div>
+
+  <script>
+    // Theme handling
+    (function() {
+      const html = document.documentElement;
+      const toggleBtn = document.getElementById('themeToggle');
+      const icon = document.getElementById('themeIcon');
+      const label = document.getElementById('themeLabel');
+
+      function applyTheme(theme) {
+        html.setAttribute('data-theme', theme);
+        if (theme === 'night') {
+          icon.setAttribute('data-lucide', 'moon-star');
+          label.textContent = 'Night';
+        } else {
+          icon.setAttribute('data-lucide', 'sun-medium');
+          label.textContent = 'Solar';
+        }
+        lucide.createIcons();
+        localStorage.setItem('mn-theme', theme);
+      }
+
+      const saved = localStorage.getItem('mn-theme');
+      if (saved === 'night' || saved === 'solar') {
+        applyTheme(saved);
+      } else {
+        applyTheme('solar');
+      }
+
+      toggleBtn.addEventListener('click', () => {
+        const current = html.getAttribute('data-theme') === 'night' ? 'night' : 'solar';
+        applyTheme(current === 'night' ? 'solar' : 'night');
+      });
+    })();
+
+    // Fee calculator
+    (function() {
+      const statePreset = document.getElementById('statePreset');
+      const customRateWrapper = document.getElementById('customRateWrapper');
+      const customRateInput = document.getElementById('customRate');
+      const sigInput = document.getElementById('signatureCount');
+      const milesInput = document.getElementById('travelMiles');
+      const mileageRateInput = document.getElementById('mileageRate');
+      const totalDisplay = document.getElementById('totalFeeDisplay');
+      const breakdownEl = document.getElementById('feeBreakdown');
+
+      function getStateRate() {
+        if (statePreset.value === 'custom') {
+          const val = parseFloat(customRateInput.value || '0');
+          return isNaN(val) ? 0 : val;
+        }
+        const opt = statePreset.options[statePreset.selectedIndex];
+        const rate = parseFloat(opt.dataset.rate || '0');
+        return isNaN(rate) ? 0 : rate;
+      }
+
+      function recalc() {
+        const sigs = parseFloat(sigInput.value || '0');
+        const miles = parseFloat(milesInput.value || '0');
+        const stateRate = getStateRate();
+        const mileageRate = parseFloat(mileageRateInput.value || '0');
+
+        const sigFee = sigs * stateRate;
+        const milesFee = miles * mileageRate;
+        const total = sigFee + milesFee;
+
+        totalDisplay.textContent = '$' + total.toFixed(2);
+
+        if (!sigs && !miles) {
+          breakdownEl.textContent = 'Waiting for inputs…';
+          return;
+        }
+
+        const parts = [];
+        parts.push(sigs + ' sig × $' + stateRate.toFixed(2));
+        parts.push(miles.toFixed(1) + ' mi × $' + mileageRate.toFixed(2));
+        breakdownEl.textContent = parts.join('  •  ');
+      }
+
+      statePreset.addEventListener('change', () => {
+        customRateWrapper.classList.toggle('hidden', statePreset.value !== 'custom');
+        recalc();
+      });
+
+      [customRateInput, sigInput, milesInput, mileageRateInput].forEach(el => {
+        el.addEventListener('input', recalc);
+      });
+
+      recalc();
+    })();
+
+    // Mileage log with localStorage
+    (function() {
+      const STORAGE_KEY = 'mn-mileage-log-v1';
+      const form = document.getElementById('mileageForm');
+      const dateInput = document.getElementById('tripDate');
+      const descInput = document.getElementById('tripDesc');
+      const milesInput = document.getElementById('tripMiles');
+      const tbody = document.getElementById('logTbody');
+      const noLogs = document.getElementById('noLogs');
+      const exportBtn = document.getElementById('exportCsv');
+
+      function todayISO() {
+        const d = new Date();
+        return d.toISOString().slice(0, 10);
+      }
+
+      dateInput.value = todayISO();
+
+      function loadLogs() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch (e) {
+          console.warn('Failed to load logs', e);
+          return [];
+        }
+      }
+
+      function saveLogs(logs) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+      }
+
+      function render() {
+        const logs = loadLogs();
+        tbody.innerHTML = '';
+        if (!logs.length) {
+          noLogs.classList.remove('hidden');
+          return;
+        }
+        noLogs.classList.add('hidden');
+        logs
+          .slice()
+          .sort((a, b) => (a.date < b.date ? 1 : -1))
+          .slice(0, 30)
+          .forEach((log, idx) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td class="pr-2 align-top">${log.date}</td>
+              <td class="pr-2 align-top break-words max-w-[7rem]">${log.desc ? log.desc.replace(/</g, '&lt;') : ''}</td>
+              <td class="pr-2 text-right align-top">${Number(log.miles).toFixed(1)}</td>
+              <td class="pr-2 text-right align-top">
+                <button data-idx="${idx}" class="text-[11px] text-red-500 hover:underline">Delete</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const date = dateInput.value || todayISO();
+        const miles = parseFloat(milesInput.value || '0');
+        if (!miles || miles <= 0) return;
+        const desc = descInput.value.trim();
+        const logs = loadLogs();
+        logs.push({ date, desc, miles });
+        saveLogs(logs);
+        milesInput.value = '';
+        descInput.value = '';
+        render();
+      });
+
+      tbody.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-idx]');
+        if (!btn) return;
+        const idx = parseInt(btn.dataset.idx, 10);
+        const logs = loadLogs();
+        if (idx >= 0 && idx < logs.length && confirm('Delete this trip entry?')) {
+          logs.splice(idx, 1);
+          saveLogs(logs);
+          render();
+        }
+      });
+
+      exportBtn.addEventListener('click', () => {
+        const logs = loadLogs();
+        if (!logs.length) {
+          alert('No mileage entries to export yet.');
+          return;
+        }
+        const header = ['Date', 'Description', 'Miles'];
+        const rows = logs.map(l => [l.date, (l.desc || '').replace(/"/g, '""'), l.miles]);
+        const csvLines = [header.join(','), ...rows.map(r => r.map((v, i) => (i === 1 ? '"' + v + '"' : v)).join(','))];
+        const blob = new Blob([csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'mobile-notary-mileage.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+
+      render();
+    })();
+
+    // Invoice generation and Web Share
+    (function() {
+      const btn = document.getElementById('generateInvoice');
+      const clientInput = document.getElementById('clientName');
+
+      function currentCalcSnapshot() {
+        const statePreset = document.getElementById('statePreset');
+        const customRateInput = document.getElementById('customRate');
+        const sigInput = document.getElementById('signatureCount');
+        const milesInput = document.getElementById('travelMiles');
+        const mileageRateInput = document.getElementById('mileageRate');
+
+        const stateLabel = statePreset.options[statePreset.selectedIndex].textContent.trim();
+        const stateRate = statePreset.value === 'custom'
+          ? parseFloat(customRateInput.value || '0')
+          : parseFloat(statePreset.options[statePreset.selectedIndex].dataset.rate || '0');
+
+        const sigs = parseFloat(sigInput.value || '0');
+        const miles = parseFloat(milesInput.value || '0');
+        const mileageRate = parseFloat(mileageRateInput.value || '0');
+
+        const sigFee = sigs * stateRate;
+        const milesFee = miles * mileageRate;
+        const total = sigFee + milesFee;
+
+        return {
+          stateLabel,
+          stateRate,
+          sigs,
+          miles,
+          mileageRate,
+          sigFee,
+          milesFee,
+          total,
+        };
+      }
+
+      async function generatePdfAndShare() {
+        const { jsPDF } = window.jspdf;
+        const snapshot = currentCalcSnapshot();
+        if (!snapshot.sigs && !snapshot.miles) {
+          alert('Enter signatures and/or miles first so the invoice has amounts to show.');
+          return;
+        }
+
+        const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+        const margin = 48;
+        let y = margin;
+
+        const today = new Date();
+        const dateStr = today.toLocaleDateString();
+        const clientName = clientInput.value.trim();
+
+        // Header
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(18);
+        doc.text('Mobile Notary Invoice', margin, y);
+        y += 26;
+
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Date: ${dateStr}`, margin, y);
+        y += 14;
+        if (clientName) {
+          doc.text(`Bill to: ${clientName}`, margin, y);
+          y += 16;
+        }
+
+        y += 8;
+        doc.setDrawColor(200);
+        doc.line(margin, y, 595 - margin, y);
+        y += 24;
+
+        // Line items header
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.text('Description', margin, y);
+        doc.text('Qty', 320, y);
+        doc.text('Rate', 380, y);
+        doc.text('Amount', 470, y);
+        y += 12;
+
+        doc.setDrawColor(220);
+        doc.line(margin, y, 595 - margin, y);
+        y += 18;
+
+        doc.setFont('helvetica', 'normal');
+
+        // Notarization line
+        if (snapshot.sigs) {
+          doc.text(`Notarization (${snapshot.stateLabel})`, margin, y);
+          doc.text(String(snapshot.sigs), 320, y, { align: 'right' });
+          doc.text(`$${snapshot.stateRate.toFixed(2)}`, 420, y, { align: 'right' });
+          doc.text(`$${snapshot.sigFee.toFixed(2)}`, 520, y, { align: 'right' });
+          y += 18;
+        }
+
+        // Travel line
+        if (snapshot.miles) {
+          doc.text('Travel / mileage', margin, y);
+          doc.text(snapshot.miles.toFixed(1) + ' mi', 320, y, { align: 'right' });
+          doc.text(`$${snapshot.mileageRate.toFixed(2)}`, 420, y, { align: 'right' });
+          doc.text(`$${snapshot.milesFee.toFixed(2)}`, 520, y, { align: 'right' });
+          y += 18;
+        }
+
+        y += 6;
+        doc.setDrawColor(220);
+        doc.line(margin, y, 595 - margin, y);
+        y += 18;
+
+        // Totals
+        doc.setFont('helvetica', 'bold');
+        doc.text('Total due:', 420, y, { align: 'right' });
+        doc.text(`$${snapshot.total.toFixed(2)}`, 520, y, { align: 'right' });
+        y += 28;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        const disclaimer = 'Note: This invoice is based on your entered state preset and mileage rate. Confirm compliance with your jurisdiction\'s notarial fee rules.';
+        const lines = doc.splitTextToSize(disclaimer, 595 - margin * 2);
+        doc.text(lines, margin, y);
+
+        const pdfBlob = doc.output('blob');
+        const fileName = `mobile-notary-invoice-${today.toISOString().slice(0, 10)}.pdf`;
+
+        // Always download first
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        // After download, try Web Share with file where supported
+        if (navigator.canShare && window.File && window.Blob) {
+          try {
+            const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
+            if (navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                title: 'Mobile Notary Invoice',
+                text: clientName ? `Invoice for ${clientName}` : 'Mobile notary invoice',
+                files: [file],
+              });
+            }
+          } catch (err) {
+            console.warn('Share with file failed after download', err);
+          }
+        }
+      }
+
+      btn.addEventListener('click', () => {
+        generatePdfAndShare();
+      });
+    })();
+
+    // Initialize Lucide icons after DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
